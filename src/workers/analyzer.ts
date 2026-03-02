@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { db } from "../db/client";
+import { sendRiskAlert } from "../services/notification"; 
 
 const RISKY_KEYWORDS = ["guns", "drugs", "weapons", "narcotics", "explosives"];
 
@@ -51,13 +52,21 @@ export async function analyzeWebsite(executionId: string, monitorId: string, url
     let riskScore = Math.min(totalRisks * 20, 100); 
 
     if (totalRisks > 0) {
-      console.log(`[Worker] ⚠️ ALERT: Found risks on ${url}!`, findings);
-      
-      await db.query(
+        console.log(`[Worker] ⚠️ ALERT: Found risks on ${url}!`, findings);
+
+        await db.query(
         `INSERT INTO alerts (execution_id, monitor_id, severity, message, metadata) 
-         VALUES ($1, $2, 'high', 'Risky content found', $3)`,
+            VALUES ($1, $2, 'high', 'Risky content found', $3)`,
         [executionId, monitorId, JSON.stringify(findings)]
-      );
+        );
+
+      // Get the email we saved (you'll need to fetch it or pass it from the scheduler)
+        const monitorRes = await db.query(`SELECT customer_email FROM monitors WHERE id = $1`, [monitorId]);
+        const email = monitorRes.rows[0].customer_email;
+
+        if (email) {
+            await sendRiskAlert(email, url, totalRisks);
+        }
     } else {
       console.log(`[Worker] ✅ ${url} looks safe.`);
     }
