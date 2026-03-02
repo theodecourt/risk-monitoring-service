@@ -20,12 +20,17 @@ export async function monitorRoutes(app: FastifyInstance) {
     }
 
     try {
-      const result = await db.query(
-        `INSERT INTO monitors (url, frequency_seconds, next_run_at) 
-         VALUES ($1, $2, NOW()) 
-         RETURNING *`,
-        [url, frequency_seconds] 
-      );
+        const result = await db.query(
+            `INSERT INTO monitors (url, frequency_seconds, next_run_at, customer_email) 
+             VALUES ($1, $2, NOW(), $3) 
+             ON CONFLICT (url) 
+             DO UPDATE SET 
+               frequency_seconds = EXCLUDED.frequency_seconds,
+               customer_email = EXCLUDED.customer_email,
+               updated_at = NOW()
+             RETURNING *`,
+            [url, frequency_seconds, customer_email]
+          );
 
       const newMonitor = result.rows[0];
 

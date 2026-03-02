@@ -16,7 +16,7 @@ db.query('SELECT NOW()')
   .then((res) => {
     console.log('✅ Banco conectado! Hora:', res.rows[0].now);
     // Start the scheduler only after confirming DB connection
-    startScheduler(); // <-- Add this line
+    startScheduler(); 
   })
   .catch((err) => console.error('❌ Erro crítico no banco:', err));
 
