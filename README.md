@@ -184,6 +184,7 @@ CREATE TABLE alerts (
 The system employs a Weighted Risk Scoring model designed to minimize false positives while identifying coordinated illicit content. Rather than a binary "yes/no" keyword check, it evaluates the cumulative context of a page.
 
 1. Weighted Scoring Model
+
 An alert is only triggered if the aggregate Risk Score crosses a threshold of 60 points. This prevents a single mention of a word from triggering a false alarm.
 
 | Severity    | Keywords                         | Weight        |
@@ -195,6 +196,7 @@ An alert is only triggered if the aggregate Risk Score crosses a threshold of 60
 Image Heuristics: Keywords found in image metadata (alt, title, or src) contribute 50% of their weight to the total score. This acknowledges that filenames provide high-signal intent but should be validated by page context.
 
 2. Multi-Vector Analysis
+
 The worker analyzes the following HTML vectors to ensure comprehensive coverage:
 
 Regex-Based Fuzzy Matching: To bypass obfuscation (e.g., g.u.n.s or d r u g s), the system uses dynamic regular expressions to identify target words regardless of common separator characters.
