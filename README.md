@@ -40,8 +40,6 @@ The system is built to be "Cloud-Ready." Here is how the local implementation ma
 
 - npm: v9.x or higher
 
-- Supabase/Postgres: A running PostgreSQL instance (Supabase recommended).
-
 ### 2. Installation
 
 1. Clone the repository.
