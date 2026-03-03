@@ -23,6 +23,13 @@ The system is built to be "Cloud-Ready." Here is how the local implementation ma
 
 <img width="1100" height="458" alt="image" src="https://github.com/user-attachments/assets/0d8735af-a939-4d44-865f-44e6a1d71dca" />
 
+## Key Design Choices
+
+- **Idempotency:** The `POST /monitors` endpoint uses a PostgreSQL `ON CONFLICT` clause. This ensures that duplicate requests for the same URL update existing settings rather than creating redundant jobs.
+- **Concurrency Control:** Locally, `fastq` limits the worker to 2 simultaneous scans. This simulates the "reserved concurrency" of an AWS Lambda, protecting the system from CPU/Network exhaustion.
+- **Observability:** By separating `executions` from `monitors`, we create a full audit trail. Even failed scans are recorded with `error_message`, allowing for easier debugging and customer transparency.
+- **Latency vs. Cost:** We chose a static scraper (Cheerio) as the primary engine. It is 10x faster and cheaper to run than a headless browser (Puppeteer), making it the ideal "First-Pass" filter before escalating to more expensive AI or browser-based tools.
+
 # Getting Started
 
 #### This project is built with TypeScript and Node.js. It is cross-platform and works on Windows (PowerShell/CMD), macOS, and Linux.
