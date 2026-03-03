@@ -50,7 +50,7 @@ The system is built to be "Cloud-Ready." Here is how the local implementation ma
 npm install
 ```
 
-3. Configure Environment:
+### 3. Configure Environment:
 
 **macOS / Linux:**
 ```
@@ -66,7 +66,7 @@ copy .env.example .env
 
 Database Connection: After creating the .env file, open it and replace the DATABASE_URL placeholder with the connection string provided in the submission message. This will connect the project to our pre-configured Supabase instance, allowing you to see historical scan data and active alerts immediately.
 
-4. Running the Project
+### 4. Running the Project
 
 Once the ```.env``` file is configured with the provided ```DATABASE_URL```, you can start the system.
 
