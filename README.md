@@ -21,7 +21,7 @@ The system is built to be "Cloud-Ready." Here is how the local implementation ma
 
 # System Diagram
 
-<img width="1183" height="526" alt="image" src="https://github.com/user-attachments/assets/4ec9a30f-1b8a-44e5-8f31-d754fb1aeb9e" />
+<img width="1098" height="452" alt="image" src="https://github.com/user-attachments/assets/3cf2f8a1-f6f7-466c-8abf-28305da3e339" />
 
 # Getting Started
 
