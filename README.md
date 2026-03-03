@@ -181,13 +181,29 @@ CREATE TABLE alerts (
 
 # Detection Logic & Heuristics
 
-The system uses a weighted metadata heuristic approach:
+The system employs a Weighted Risk Scoring model designed to minimize false positives while identifying coordinated illicit content. Rather than a binary "yes/no" keyword check, it evaluates the cumulative context of a page.
 
-Metadata Analysis: Scans alt tags, title attributes, and image filenames (src) for risky keywords.
+1. Weighted Scoring Model
+An alert is only triggered if the aggregate Risk Score crosses a threshold of 60 points. This prevents a single mention of a word from triggering a false alarm.
 
-Text Analysis: Scans the DOM body for illicit trade keywords.
+| Severity    | Keywords                         | Weight        |
+|-------------|----------------------------------|---------------|
+| Critical    | Explosives, Weapons, Guns        | 40 - 50 pts   |
+| High        | Narcotics, Drugs                 | 30 - 40 pts   |
+| Contextual  | Telegram, Buy, Cannabis          | 10 - 20 pts   |
 
-Bot Bypass: Implements custom User-Agent headers to bypass basic anti-bot protections.
+Image Heuristics: Keywords found in image metadata (alt, title, or src) contribute 50% of their weight to the total score. This acknowledges that filenames provide high-signal intent but should be validated by page context.
+
+2. Multi-Vector Analysis
+The worker analyzes the following HTML vectors to ensure comprehensive coverage:
+
+Regex-Based Fuzzy Matching: To bypass obfuscation (e.g., g.u.n.s or d r u g s), the system uses dynamic regular expressions to identify target words regardless of common separator characters.
+
+Metadata Extraction: Scans accessibility alt tags, hover title attributes, and raw image filenames.
+
+Textual DOM Analysis: Performs a full-body scan of the rendered text content.
+
+Anti-Bot Protection: Implements rotated, high-reputation User-Agent headers to simulate legitimate browser traffic and bypass basic firewall blocks.
 
 #### Known Limitations
 
