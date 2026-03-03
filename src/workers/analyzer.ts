@@ -66,6 +66,14 @@ export async function analyzeWebsite(executionId: string, monitorId: string, url
 
     if (finalRiskScore >= RISK_THRESHOLD) {
         console.log(`[Worker] ⚠️ ALERT: High risk detected (${finalRiskScore}pts) on ${url}`);
+        
+        if (findings.risky_text.length > 0) {
+          console.log(`[Worker] 👉 Risky Keywords: ${findings.risky_text.join(", ")}`);
+        }
+        if (findings.risky_images.length > 0) {
+          console.log(`[Worker] 👉 Risky Images: ${findings.risky_images.length} found`);
+          findings.risky_images.forEach(img => console.log(`   - ${img}`));
+        }
 
         await db.query(
           `INSERT INTO alerts (execution_id, monitor_id, severity, message, metadata) 
@@ -76,9 +84,20 @@ export async function analyzeWebsite(executionId: string, monitorId: string, url
         const monitorRes = await db.query(`SELECT customer_email FROM monitors WHERE id = $1`, [monitorId]);
         const email = monitorRes.rows[0].customer_email;
 
-        if (email) await sendRiskAlert(email, url, findings.risky_text.length);
+        if (email) {
+            await sendRiskAlert(
+              email, 
+              url, 
+              findings.risky_text.length, 
+              findings.risky_images.length
+            );
+          }
     } else {
       console.log(`[Worker] ✅ ${url} passed (Score: ${finalRiskScore}).`);
+      // Optional: show low-level findings even if score didn't cross threshold
+      if (totalScore > 0) {
+        console.log(`[Worker] Note: Minor findings detected but below threshold: ${findings.risky_text.join(", ")}`);
+      }
     }
 
     await db.query(

@@ -60,6 +60,7 @@ copy .env.example .env
 
 # API Documentation
 
+### POST
 ```
 POST /monitors
 ```
@@ -72,6 +73,7 @@ Create or update a monitor. This route is Idempotent; posting an existing URL wi
 { "url": "string", "frequency_seconds": number, "customer_email": "string" }
 ```
 
+### GET
 ```
 GET /monitors
 ```
@@ -84,11 +86,37 @@ GET /monitors/:id
 
 Returns detailed information about a monitor, including the latest 5 scan results from the execution history.
 
+### DELETE
 ```
 DELETE /monitors/:id
 ```
 
 Deletes a monitor and its associated execution/alert history.
+
+# Usage Examples
+
+1. Create a New Monitor
+
+Use this command to start monitoring a website:
+
+```
+curl -X POST http://localhost:3000/monitors \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://en.wikipedia.org/wiki/Firearm",
+    "frequency_seconds": 60,
+    "customer_email": "email@example.com"
+  }'
+```
+
+2. Check Monitor Status & History
+
+After a few minutes, use the ID returned by the POST request to see the analysis results:
+
+```
+# Replace :id with the UUID from the previous step
+curl http://localhost:3000/monitors/:id
+```
 
 # Detection Logic & Heuristics
 
