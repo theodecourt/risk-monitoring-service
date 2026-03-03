@@ -105,7 +105,7 @@ curl -X POST http://localhost:3000/monitors \
   -d '{
     "url": "https://en.wikipedia.org/wiki/Firearm",
     "frequency_seconds": 60,
-    "customer_email": "email@example.com"
+    "customer_email": "user@example.com"
   }'
 ```
 
