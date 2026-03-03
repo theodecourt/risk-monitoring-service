@@ -50,7 +50,7 @@ The system is built to be "Cloud-Ready." Here is how the local implementation ma
 npm install
 ```
 
-### 3. Configure Environment:
+3. Configure Environment:
 
 **macOS / Linux:**
 ```
