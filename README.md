@@ -118,6 +118,60 @@ After a few minutes, use the ID returned by the POST request to see the analysis
 curl http://localhost:3000/monitors/:id
 ```
 
+# Database Schema
+
+The system uses a relational PostgreSQL schema designed for auditability and historical tracking.
+
+```
+CREATE TABLE monitors (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  url TEXT NOT NULL,
+
+  frequency_seconds INTEGER NOT NULL,
+
+  next_run_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+
+  is_active BOOLEAN DEFAULT true
+);
+
+CREATE TABLE executions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  monitor_id UUID REFERENCES monitors(id) ON DELETE CASCADE,
+
+  status TEXT NOT NULL,
+  -- pending | running | completed | failed
+
+  risk_score NUMERIC,
+  findings JSONB,
+
+  started_at TIMESTAMP WITH TIME ZONE,
+  completed_at TIMESTAMP WITH TIME ZONE,
+
+  error_message TEXT,
+
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE alerts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  execution_id UUID REFERENCES executions(id) ON DELETE CASCADE,
+  monitor_id UUID REFERENCES monitors(id) ON DELETE CASCADE,
+
+  severity TEXT,
+  message TEXT,
+  metadata JSONB,
+
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+```
+
+
 # Detection Logic & Heuristics
 
 The system uses a weighted metadata heuristic approach:
