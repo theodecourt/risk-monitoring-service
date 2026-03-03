@@ -1,3 +1,19 @@
+import { Blob } from 'node:buffer';
+
+// Fix for Node 18.x environments where File is not globally defined
+if (typeof global.File === 'undefined') {
+  class File extends Blob {
+    name: string;
+    lastModified: number;
+    constructor(parts: any[], filename: string, options?: any) {
+      super(parts, options);
+      this.name = filename;
+      this.lastModified = options?.lastModified || Date.now();
+    }
+  }
+  (global as any).File = File;
+}
+
 import "dotenv/config";
 import Fastify from "fastify";
 import { monitorRoutes } from "./api/monitors/routes";
