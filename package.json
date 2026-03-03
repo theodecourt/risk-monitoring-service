@@ -1,8 +1,8 @@
 {
   "name": "risk-monitoring-service",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Event-driven website risk monitoring service",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
@@ -13,25 +13,22 @@
     "url": "git+https://github.com/theodecourt/risk-monitoring-service.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Theo Decourt",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/theodecourt/risk-monitoring-service/issues"
-  },
-  "homepage": "https://github.com/theodecourt/risk-monitoring-service#readme",
   "dependencies": {
-    "axios": "^1.13.5",
-    "cheerio": "^1.2.0",
-    "dotenv": "^17.3.1",
-    "fastify": "^5.7.4",
-    "node-cron": "^4.2.1",
-    "pg": "^8.19.0"
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.1",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.5"
   },
   "devDependencies": {
-    "@types/node": "^25.3.2",
-    "@types/pg": "^8.18.0",
+    "@types/node": "^20.11.0",
+    "@types/node-cron": "^3.0.11",
+    "@types/pg": "^8.11.4",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.3.3"
   }
 }

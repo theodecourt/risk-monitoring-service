@@ -51,7 +51,6 @@ npm install
 ```
 
 3. Configure Environment:
-Run the following command to set up your environment variables (this will connect you to our pre-configured Supabase instance):
 
 **macOS / Linux:**
 ```
@@ -66,6 +65,24 @@ copy .env.example .env
 ⚠️ IMPORTANT
 
 Database Connection: After creating the .env file, open it and replace the DATABASE_URL placeholder with the connection string provided in the submission message. This will connect the project to our pre-configured Supabase instance, allowing you to see historical scan data and active alerts immediately.
+
+4. Running the Project
+
+Once the ```.env``` file is configured with the provided ```DATABASE_URL```, you can start the system.
+
+**Development Mode**
+
+```
+npm run dev
+```
+
+**Production Build**
+
+```
+npm run build
+npm start
+```
+
 
 # API Documentation
 
