@@ -25,7 +25,7 @@ The system is built to be "Cloud-Ready." Here is how the local implementation ma
 
 # Getting Started
 
-## This project is built with TypeScript and Node.js. It is cross-platform and works on Windows (PowerShell/CMD), macOS, and Linux.
+#### This project is built with TypeScript and Node.js. It is cross-platform and works on Windows (PowerShell/CMD), macOS, and Linux.
 
 ### 1. Prerequisites
 
@@ -45,5 +45,50 @@ The system is built to be "Cloud-Ready." Here is how the local implementation ma
 npm install
 ```
 
-3. Create a ```.env``` file in the root directory and paste the provided credentials:
+3. Configure Environment:
+Run the following command to set up your environment variables (this will connect you to our pre-configured Supabase instance):
+
+**macOS / Linux:**
+```
+cp .env.example .env
+```
+
+**Windows (PowerShell):**
+```
+copy .env.example .env
+```
+
+# API Documentation
+
+```
+POST /monitors
+```
+
+Create or update a monitor. This route is Idempotent; posting an existing URL will update its frequency and re-activate it.
+
+**Body:**
+
+```
+{ "url": "string", "frequency_seconds": number, "customer_email": "string" }
+```
+
+```
+GET /monitors
+```
+
+Returns a list of all configured monitors.
+
+```
+GET /monitors/:id
+```
+
+Returns detailed information about a monitor, including the latest 5 scan results from the execution history.
+
+```
+DELETE /monitors/:id
+```
+
+Deletes a monitor and its associated execution/alert history.
+
+# Detection Logic & Heuristics
 

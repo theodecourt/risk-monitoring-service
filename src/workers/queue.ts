@@ -1,6 +1,4 @@
 import * as fastq from "fastq";
-import type { promiseWorker } from "fastq";
-import { analyzeWebsite } from "./analyzer";
 
 type Task = {
   executionId: string;
@@ -8,9 +6,10 @@ type Task = {
   url: string;
 };
 
-const worker: promiseWorker<Task> = async (task) => {
+async function worker(task: Task) {
+  const { analyzeWebsite } = await import("./analyzer");
   await analyzeWebsite(task.executionId, task.monitorId, task.url);
-};
+}
 
 export const analysisQueue = fastq.promise(worker, 2);
 
