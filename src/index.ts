@@ -2,7 +2,7 @@ import "dotenv/config";
 import Fastify from "fastify";
 import { monitorRoutes } from "./api/monitors/routes";
 import { db } from "./db/client";
-import { startScheduler } from "./scheduler"; // <-- Add this import
+import { startScheduler } from "./scheduler"; 
 
 const app = Fastify();
 
@@ -15,7 +15,6 @@ app.get("/health", async () => {
 db.query('SELECT NOW()')
   .then((res) => {
     console.log('✅ DB Connected! Time:', res.rows[0].now);
-    // Start the scheduler only after confirming DB connection
     startScheduler(); 
   })
   .catch((err) => console.error('❌ Erro crítico no banco:', err));

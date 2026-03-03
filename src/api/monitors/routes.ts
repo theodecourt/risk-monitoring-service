@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify";
 import { db } from "../../db/client";
 
 export async function monitorRoutes(app: FastifyInstance) {
-  // --- POST: Create or Update a monitor (Idempotent) ---
+  // POST
   app.post("/", async (request, reply) => {
     const { url, frequency_seconds, customer_email } = request.body as {
       url: string;
@@ -38,7 +38,7 @@ export async function monitorRoutes(app: FastifyInstance) {
     }
   });
 
-  // --- GET: List all monitors ---
+  // GET: List all monitors 
   app.get("/", async (request, reply) => {
     try {
       const result = await db.query("SELECT * FROM monitors ORDER BY created_at DESC");
@@ -48,14 +48,13 @@ export async function monitorRoutes(app: FastifyInstance) {
     }
   });
 
-  // --- GET: Get specific monitor details + History ---
+  // GET: Get specific monitor details + History
   app.get("/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
     try {
       const monitor = await db.query("SELECT * FROM monitors WHERE id = $1", [id]);
       if (monitor.rows.length === 0) return reply.status(404).send({ error: "Not found" });
 
-      // Bonus: Also fetch the last 5 executions so the user sees history
       const history = await db.query(
         "SELECT * FROM executions WHERE monitor_id = $1 ORDER BY started_at DESC LIMIT 5",
         [id]
@@ -70,12 +69,10 @@ export async function monitorRoutes(app: FastifyInstance) {
     }
   });
 
-  // --- DELETE: Remove a monitor ---
+  // DELETE
   app.delete("/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
     try {
-      // Note: Foreign key constraints in your DB should handle 
-      // cascading deletes for executions/alerts if set up that way.
       const result = await db.query("DELETE FROM monitors WHERE id = $1 RETURNING id", [id]);
       
       if (result.rows.length === 0) {

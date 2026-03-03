@@ -11,7 +11,6 @@ export async function analyzeWebsite(executionId: string, monitorId: string, url
 
     await db.query(`UPDATE executions SET status = 'running', started_at = NOW() WHERE id = $1`, [executionId]);
 
-    // Fetch HTML
     const response = await axios.get(url, { 
         timeout: 10000,
         headers: {
@@ -26,13 +25,13 @@ export async function analyzeWebsite(executionId: string, monitorId: string, url
       risky_images: []
     };
 
-    // --- 1. ANALYZE TEXT ---
+    // ANALYZE TEXT
     const textContent = $('body').text().toLowerCase();
     RISKY_KEYWORDS.forEach(kw => {
       if (textContent.includes(kw)) findings.risky_text.push(kw);
     });
 
-    // --- 2. ANALYZE IMAGES ---
+    // ANALYZE IMAGES 
     $('img').each((_, el) => {
       const alt = $(el).attr('alt')?.toLowerCase() || "";
       const src = $(el).attr('src')?.toLowerCase() || "";
@@ -47,7 +46,6 @@ export async function analyzeWebsite(executionId: string, monitorId: string, url
       });
     });
 
-    // --- 3. CALCULATE RISK & SAVE ---
     const totalRisks = findings.risky_text.length + findings.risky_images.length;
     let riskScore = Math.min(totalRisks * 20, 100); 
 
@@ -60,7 +58,6 @@ export async function analyzeWebsite(executionId: string, monitorId: string, url
         [executionId, monitorId, JSON.stringify(findings)]
         );
 
-      // Get the email we saved (you'll need to fetch it or pass it from the scheduler)
         const monitorRes = await db.query(`SELECT customer_email FROM monitors WHERE id = $1`, [monitorId]);
         const email = monitorRes.rows[0].customer_email;
 
