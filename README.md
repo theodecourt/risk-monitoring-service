@@ -63,7 +63,7 @@ cp .env.example .env
 copy .env.example .env
 ```
 
-[⚠️ IMPORTANT]
+⚠️ IMPORTANT
 
 Database Connection: After creating the .env file, open it and replace the DATABASE_URL placeholder with the connection string provided in the submission message. This will connect the project to our pre-configured Supabase instance, allowing you to see historical scan data and active alerts immediately.
 
