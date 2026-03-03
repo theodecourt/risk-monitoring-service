@@ -193,19 +193,19 @@ An alert is only triggered if the aggregate Risk Score crosses a threshold of 60
 | High        | Narcotics, Drugs                 | 30 - 40 pts   |
 | Contextual  | Telegram, Buy, Cannabis          | 10 - 20 pts   |
 
-Image Heuristics: Keywords found in image metadata (alt, title, or src) contribute 50% of their weight to the total score. This acknowledges that filenames provide high-signal intent but should be validated by page context.
+- Image Heuristics: Keywords found in image metadata (alt, title, or src) contribute 50% of their weight to the total score. This acknowledges that filenames provide high-signal intent but should be validated by page context.
 
 2. Multi-Vector Analysis
 
 The worker analyzes the following HTML vectors to ensure comprehensive coverage:
 
-Regex-Based Fuzzy Matching: To bypass obfuscation (e.g., g.u.n.s or d r u g s), the system uses dynamic regular expressions to identify target words regardless of common separator characters.
+- Regex-Based Fuzzy Matching: To bypass obfuscation (e.g., g.u.n.s or d r u g s), the system uses dynamic regular expressions to identify target words regardless of common separator characters.
 
-Metadata Extraction: Scans accessibility alt tags, hover title attributes, and raw image filenames.
+- Metadata Extraction: Scans accessibility alt tags, hover title attributes, and raw image filenames.
 
-Textual DOM Analysis: Performs a full-body scan of the rendered text content.
+- Textual DOM Analysis: Performs a full-body scan of the rendered text content.
 
-Anti-Bot Protection: Implements rotated, high-reputation User-Agent headers to simulate legitimate browser traffic and bypass basic firewall blocks.
+- Anti-Bot Protection: Implements rotated, high-reputation User-Agent headers to simulate legitimate browser traffic and bypass basic firewall blocks.
 
 #### Known Limitations
 
