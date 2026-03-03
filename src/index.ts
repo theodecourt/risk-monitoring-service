@@ -14,7 +14,7 @@ app.get("/health", async () => {
 
 db.query('SELECT NOW()')
   .then((res) => {
-    console.log('✅ Banco conectado! Hora:', res.rows[0].now);
+    console.log('✅ DB Connected! Time:', res.rows[0].now);
     // Start the scheduler only after confirming DB connection
     startScheduler(); 
   })
