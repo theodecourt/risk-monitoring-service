@@ -92,3 +92,25 @@ Deletes a monitor and its associated execution/alert history.
 
 # Detection Logic & Heuristics
 
+The system uses a weighted metadata heuristic approach:
+
+Metadata Analysis: Scans alt tags, title attributes, and image filenames (src) for risky keywords.
+
+Text Analysis: Scans the DOM body for illicit trade keywords.
+
+Bot Bypass: Implements custom User-Agent headers to bypass basic anti-bot protections.
+
+#### Known Limitations
+
+Client-Side Rendering (CSR): The current scraper (Axios + Cheerio) does not execute JavaScript. Content rendered dynamically (SPAs) may not be fully scanned.
+
+# Scalability & Future Improvements
+
+- Headless Browsing: Replace Axios with Puppeteer/Playwright to handle JavaScript-heavy sites.
+
+- Computer Vision: Pass extracted image URLs to Amazon Rekognition for pixel-level weapon/drug detection.
+
+- AI-Powered Semantic Analysis: Replace or augment regex matching with an LLM (e.g., Gemini API or OpenAI) to perform Sentiment and Intent Analysis. This allows the system to distinguish between a historical article about "firearms" (educational/safe) and a storefront illegally selling "weapons" (risky), significantly reducing false positives.
+
+- Distributed Workers: In a production environment, the internal fastq queue would be replaced by Amazon SQS, allowing the Worker to scale horizontally as independent Lambda functions.
+
